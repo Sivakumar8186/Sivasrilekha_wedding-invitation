@@ -119,12 +119,29 @@ function App() {
   const mapUrl =
     "https://maps.app.goo.gl/AQJLTwkVT12W4gsW9?g_st=aw";
 
+  const invitationUrl =
+    "https://sivasrilekhawedding-invitation-dohk.vercel.app";
+
+  // Share the invitation in the language currently selected on the website.
   const shareMessage =
-    `Wedding Invitation: Sivakumar & Srilekha\n` +
-    `Date: 30 December 2026\n` +
-    `Muhurtham: 3:57 AM\n` +
-    `Venue: Salur, Andhra Pradesh\n` +
-    `Please join us and bless the couple!`;
+    language === "te"
+      ? `💍 శుభ వివాహ ఆహ్వానం 💍\n\n` +
+        `శివకుమార్ ❤️ శ్రీలేఖ\n\n` +
+        `📅 తేదీ: 30 డిసెంబర్ 2026, బుధవారం\n` +
+        `⏰ ముహూర్తం: ఉదయం 3:57 గంటలకు\n` +
+        `📍 వేదిక: సాలూరు, ఆంధ్రప్రదేశ్\n\n` +
+        `🗺️ గూగుల్ మ్యాప్స్ లొకేషన్:\n${mapUrl}\n\n` +
+        `💌 మా వివాహ ఆహ్వాన పత్రికను చూడండి:\n${invitationUrl}\n\n` +
+        `దయచేసి విచ్చేసి వధూవరులను ఆశీర్వదించండి. 🙏`
+      : `💍 Wedding Invitation 💍\n\n` +
+        `With great joy, we invite you to celebrate the wedding of\n\n` +
+        `🤵 Sivakumar ❤️ Srilekha 👰\n\n` +
+        `📅 Date: Wednesday, 30 December 2026\n` +
+        `⏰ Muhurtham: 3:57 AM\n` +
+        `📍 Venue: Salur, Andhra Pradesh, India\n\n` +
+        `🗺️ Google Maps Location:\n${mapUrl}\n\n` +
+        `💌 View our wedding invitation:\n${invitationUrl}\n\n` +
+        `Please join us and bless the couple! 🙏`;
 
   const whatsappUrl =
     `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
