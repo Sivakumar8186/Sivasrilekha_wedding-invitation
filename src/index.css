@@ -1,0 +1,519 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Cormorant Garamond', 'Noto Sans Telugu', serif;
+  color: #49351f;
+  background: #fbf6eb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* LANGUAGE SWITCH */
+
+.language-switch {
+  position: fixed;
+  z-index: 20;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border: 1px solid #c7a35a;
+  border-radius: 30px;
+  background: #fffaf0;
+  color: #80602a;
+  font-size: 15px;
+}
+
+/* WELCOME / ENVELOPE SCREEN */
+
+.envelope-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 25px;
+  background: radial-gradient(ellipse, #fffdf6 0%, #f1e2c4 100%);
+}
+
+.envelope-card {
+  position: relative;
+  width: min(100%, 540px);
+  min-height: 570px;
+  padding: 75px 30px;
+  text-align: center;
+  border: 2px solid #c9a65d;
+  outline: 1px solid #c9a65d;
+  outline-offset: 9px;
+  background: linear-gradient(145deg, #fffdf7, #f8edda);
+  box-shadow: 0 20px 60px #71542b25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.ornament {
+  color: #b18a40;
+  font-size: 48px;
+}
+
+.bottom-ornament {
+  margin-top: 20px;
+}
+
+.small-heading {
+  color: #98723c;
+  letter-spacing: 3px;
+  font-size: 17px;
+  text-transform: uppercase;
+}
+
+.gold-line {
+  height: 1px;
+  width: 120px;
+  background: #b8914c;
+  margin: 20px auto;
+}
+
+.envelope-card h1,
+.hero h1,
+.event-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 6vw, 50px);
+  color: #87652e;
+  font-weight: 500;
+}
+
+.telugu-heading {
+  font-family: 'Noto Sans Telugu', sans-serif;
+  color: #886a3d;
+  font-size: 20px;
+}
+
+.seal {
+  width: 75px;
+  height: 75px;
+  margin: 25px 0 10px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, #e8c878, #96702e);
+  color: white;
+  font-family: serif;
+  font-size: 23px;
+  box-shadow: 0 5px 15px #80602a40;
+}
+
+.envelope-note {
+  color: #8b7657;
+  font-size: 18px;
+}
+
+.gold-button {
+  display: inline-block;
+  border: 1px solid #bd984f;
+  border-radius: 30px;
+  background: linear-gradient(135deg, #d7b56e, #9d7430);
+  color: white;
+  padding: 14px 30px;
+  text-decoration: none;
+  font-size: 18px;
+  transition: transform .3s, box-shadow .3s;
+}
+
+.gold-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px #9d743044;
+}
+
+/* COMMON SECTIONS */
+
+.section {
+  padding: 85px 20px;
+  text-align: center;
+}
+
+/* MAIN WEDDING HERO */
+
+.hero {
+  min-height: 90vh;
+  display: grid;
+  place-items: center;
+  padding: 45px 20px;
+  background:
+    linear-gradient(#241b1170, #241b1170),
+    url('/images/couple.jpg') center 35% / cover no-repeat,
+    linear-gradient(135deg, #75603e, #dbc79e);
+  color: white;
+}
+
+.hero-overlay {
+  width: min(100%, 1000px);
+  padding: 55px 30px;
+  border: 1px solid #e7c77c;
+  background: #241b1160;
+  text-align: center;
+}
+
+.hero .small-heading,
+.hero h1,
+.hero-subtitle,
+.hero-date {
+  color: #fff7e8;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 6vw, 58px);
+}
+
+.name-display {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin: 35px 0;
+}
+
+.name-display h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(30px, 5vw, 54px);
+  font-weight: 500;
+  color: #f3d38e;
+}
+
+.name-display span {
+  font-size: 36px;
+  color: #f7e3b6;
+}
+
+.hero-subtitle {
+  font-size: 21px;
+}
+
+.hero-date {
+  font-size: 23px;
+  color: #f4d999;
+}
+
+/* COUPLE PHOTO SECTION */
+
+.couple-section {
+  background: #fffaf0;
+}
+
+.section-title {
+  color: #85632f;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 500;
+}
+
+.section-title span {
+  color: #bd9854;
+}
+
+/* GROOM AND BRIDE PHOTOS */
+
+.photo-grid {
+  max-width: 850px;
+  margin: 45px auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 35px;
+}
+
+.photo-card {
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid #ddc798;
+  background: #fffdf8;
+  box-shadow: 0 10px 30px #80602a12;
+  overflow: hidden;
+}
+
+.photo-card img {
+  display: block;
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  object-position: center;
+  background: linear-gradient(135deg, #ead9b5, #c8a76d);
+  border-radius: 4px;
+}
+
+.photo-card h3 {
+  color: #8c682f;
+  font-size: 30px;
+  margin-bottom: 5px;
+}
+
+.photo-card p {
+  color: #927a56;
+  font-size: 19px;
+}
+
+/* COUNTDOWN */
+
+.countdown-section {
+  background: linear-gradient(135deg, #34291d, #6d5030);
+  color: white;
+  text-align: center;
+}
+
+.countdown-section .small-heading {
+  color: #e4c782;
+}
+
+.countdown-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 500;
+  color: #f6e5be;
+}
+
+.countdown-grid {
+  max-width: 700px;
+  margin: 40px auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.count-box {
+  padding: 25px 8px;
+  border: 1px solid #c9a65d;
+  background: #ffffff0d;
+}
+
+.count-box strong {
+  display: block;
+  font-size: clamp(30px, 5vw, 48px);
+  color: #f4d58e;
+}
+
+.count-box span {
+  font-size: 16px;
+  color: #f6ead1;
+}
+
+/* LARGE COUPLE PHOTO */
+
+.couple-photo-section {
+  background: #fbf5e9;
+  text-align: center;
+}
+
+.couple-photo {
+  display: block;
+  width: min(100%, 750px);
+  max-height: 550px;
+  height: auto;
+  margin: 35px auto;
+  object-fit: cover;
+  object-position: center;
+  border: 8px solid #fffdf6;
+  outline: 1px solid #c9a65d;
+  box-shadow: 0 15px 40px #76562b22;
+}
+
+/* WEDDING EVENT DETAILS */
+
+.event-section {
+  background: #fffaf0;
+  border-top: 1px solid #e6d4ae;
+  text-align: center;
+}
+
+.event-section h2 {
+  font-size: clamp(32px, 6vw, 48px);
+}
+
+.event-details {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  border: 1px solid #d6bd8a;
+  background: #fffdf7;
+}
+
+.event-details > div {
+  padding: 20px 5px;
+  border-bottom: 1px solid #eee2c9;
+}
+
+.event-details > div:last-child {
+  border-bottom: none;
+}
+
+.event-details span {
+  color: #b18a40;
+  font-size: 24px;
+}
+
+.event-details h3 {
+  font-size: 25px;
+  color: #87652e;
+  font-weight: 500;
+}
+
+.event-details p {
+  font-size: 20px;
+}
+
+.map-button {
+  margin-top: 5px;
+}
+
+/* FOOTER */
+
+.footer {
+  padding: 60px 20px;
+  text-align: center;
+  background: #352a1f;
+  color: #f8e8c7;
+}
+
+.footer h2 {
+  color: #e8c77e;
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+}
+
+.footer p {
+  font-size: 19px;
+}
+
+.footer-note {
+  color: #dfbd76;
+}
+
+.copyright {
+  margin-top: 35px;
+  font-size: 14px !important;
+  opacity: .7;
+}
+
+/* MOBILE RESPONSIVE DESIGN */
+
+@media (max-width: 600px) {
+  .language-switch {
+    top: 12px;
+    right: 12px;
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .envelope-screen {
+    padding: 20px;
+  }
+
+  .envelope-card {
+    min-height: 520px;
+    padding: 50px 20px;
+  }
+
+  .section {
+    padding: 60px 15px;
+  }
+
+  .photo-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .photo-card img {
+    height: 380px;
+  }
+
+  .countdown-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero {
+    min-height: 85vh;
+    background-position: center 35%;
+  }
+
+  .hero-overlay {
+    padding: 35px 15px;
+  }
+
+  .name-display {
+    gap: 8px;
+  }
+
+  .name-display h2 {
+    font-size: clamp(27px, 8vw, 38px);
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+  }
+
+  .hero-date {
+    font-size: 20px;
+  }
+
+  .couple-photo {
+    border-width: 5px;
+  }
+
+  .event-details {
+    padding: 20px 12px;
+  }
+
+  /* ADDITIONAL INVITATION ENHANCEMENTS */
+
+.share-section {
+  background: linear-gradient(135deg, #f7edda, #fffdf7);
+  text-align: center;
+}
+
+.share-section p {
+  font-size: 20px;
+  color: #80602a;
+  margin: 20px auto 30px;
+}
+
+.share-section .gold-button {
+  display: inline-block;
+}
+
+.photo-card {
+  transition: box-shadow 0.3s ease;
+}
+
+.photo-card:hover {
+  box-shadow: 0 15px 35px #80602a25;
+}
+
+.seal {
+  border: 2px solid #f0d99e;
+}
+}
