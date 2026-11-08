@@ -1,531 +1,287 @@
-
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import "./index.css";
 
 const weddingDate = new Date("2026-12-30T03:57:00+05:30");
+const MAP_URL = "https://maps.app.goo.gl/AQJLTwkVT12W4gsW9?g_st=aw";
+const SITE_URL = "https://sivasrilekhawedding-invitation-dohk.vercel.app";
 
-const translations = {
+const copy = {
   en: {
-    welcome: "Together with our families",
+    mantra: "Shree Ganeshaya Namah",
+    family: "Together with our families",
+    invite: "You are cordially invited to celebrate the wedding of",
     open: "Open Invitation",
-    invitation: "Wedding Invitation",
-    dear: "With the blessings of our elders",
-    request: "We joyfully invite you to celebrate the wedding of",
-    groom: "Groom",
-    bride: "Bride",
-    countdown: "Counting Every Moment",
-    days: "Days",
-    hours: "Hours",
-    minutes: "Minutes",
-    seconds: "Seconds",
-    celebration: "The Wedding Celebration",
-    date: "Wednesday, 30 December 2026",
-    muhurtham: "Muhurtham",
-    time: "3:57 AM",
-    venue: "Venue",
-    location: "Salur, Andhra Pradesh, India",
-    directions: "Get Directions",
-    blessings: "Your presence and blessings will make our celebration more special.",
-    footer: "With love and gratitude",
-    couple: "A Beautiful Beginning",
-    groomName: "Sivakumar",
-    brideName: "Srilekha",
-    share: "Share Invitation",
-    gallery: "Our Special Moments",
-    invitationNote: "Please join us and bless the newlyweds."
+    date: "30 December 2026",
+    time: "Muhurtham · 3:57 AM",
+    details: "Wedding Celebration",
+    blessing: "With the blessings of our elders, we begin a beautiful new chapter.",
+    countdown: "Counting down to our special day",
+    days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds",
+    venue: "Venue", location: "Salur, Andhra Pradesh",
+    directions: "Get Directions", share: "Share Invitation",
+    gallery: "Our Special Moments", note: "Your presence and blessings will make our day memorable.",
+    groom: "Groom", bride: "Bride"
   },
-
   te: {
-    welcome: "మా కుటుంబాల ఆశీర్వాదాలతో",
+    mantra: "శ్రీ గణేశాయ నమః",
+    family: "మా కుటుంబాల ఆశీర్వాదాలతో",
+    invite: "మా వివాహ వేడుకకు మిమ్మల్ని సాదరంగా ఆహ్వానిస్తున్నాము",
     open: "ఆహ్వాన పత్రిక తెరవండి",
-    invitation: "వివాహ ఆహ్వానం",
-    dear: "పెద్దల ఆశీర్వాదాలతో",
-    request: "మా వివాహ వేడుకకు మిమ్మల్ని హృదయపూర్వకంగా ఆహ్వానిస్తున్నాము",
-    groom: "వరుడు",
-    bride: "వధువు",
+    date: "30 డిసెంబర్ 2026",
+    time: "శుభ ముహూర్తం · ఉదయం 3:57",
+    details: "వివాహ వేడుక",
+    blessing: "పెద్దల ఆశీస్సులతో మా జీవితంలో ఒక అందమైన కొత్త అధ్యాయం ప్రారంభం.",
     countdown: "శుభ ముహూర్తానికి మరికొంత సమయం",
-    days: "రోజులు",
-    hours: "గంటలు",
-    minutes: "నిమిషాలు",
-    seconds: "సెకన్లు",
-    celebration: "వివాహ వేడుక",
-    date: "బుధవారం, 30 డిసెంబర్ 2026",
-    muhurtham: "ముహూర్తం",
-    time: "ఉదయం 3:57 గంటలకు",
-    venue: "వేదిక",
-    location: "సాలూరు, ఆంధ్రప్రదేశ్",
-    directions: "మార్గాన్ని చూడండి",
-    blessings: "మీ రాక మరియు ఆశీర్వాదాలు మా వేడుకను మరింత ప్రత్యేకం చేస్తాయి.",
-    footer: "ప్రేమతో మరియు కృతజ్ఞతలతో",
-    couple: "ఒక అందమైన కొత్త ప్రయాణం",
-    groomName: "శివకుమార్",
-    brideName: "శ్రీలేఖ",
-    share: "ఆహ్వాన పత్రికను పంచుకోండి",
-    gallery: "మా ప్రత్యేక క్షణాలు",
-    invitationNote: "మా వివాహ వేడుకకు విచ్చేసి ఆశీర్వదించండి."
-  }
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 35 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8 }
+    days: "రోజులు", hours: "గంటలు", minutes: "నిమిషాలు", seconds: "సెకన్లు",
+    venue: "వేదిక", location: "సాలూరు, ఆంధ్రప్రదేశ్",
+    directions: "మార్గాన్ని చూడండి", share: "ఆహ్వాన పత్రికను పంచుకోండి",
+    gallery: "మా ప్రత్యేక క్షణాలు", note: "మీ రాక, ఆశీస్సులు మా రోజును మరింత ప్రత్యేకం చేస్తాయి.",
+    groom: "వరుడు", bride: "వధువు"
   }
 };
 
 function useCountdown() {
-  const [remaining, setRemaining] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  });
-
+  const [left, setLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   useEffect(() => {
     const update = () => {
-      const difference = Math.max(
-        0,
-        weddingDate.getTime() - Date.now()
-      );
-
-      setRemaining({
-        days: Math.floor(difference / 86400000),
-        hours: Math.floor((difference / 3600000) % 24),
-        minutes: Math.floor((difference / 60000) % 60),
-        seconds: Math.floor((difference / 1000) % 60)
+      const ms = Math.max(0, weddingDate.getTime() - Date.now());
+      setLeft({
+        days: Math.floor(ms / 86400000),
+        hours: Math.floor((ms / 3600000) % 24),
+        minutes: Math.floor((ms / 60000) % 60),
+        seconds: Math.floor((ms / 1000) % 60)
       });
     };
-
     update();
-
-    const timer = setInterval(update, 1000);
-
-    return () => clearInterval(timer);
+    const timer = window.setInterval(update, 1000);
+    return () => window.clearInterval(timer);
   }, []);
-
-  return remaining;
+  return left;
 }
 
-function App() {
+const petals = Array.from({ length: 18 }, (_, i) => i);
+
+export default function App() {
   const [language, setLanguage] = useState("en");
   const [opened, setOpened] = useState(false);
+  const [musicOn, setMusicOn] = useState(false);
+  const audioRef = useRef(null);
+  const countdown = useCountdown();
+  const t = copy[language];
 
-  const t = translations[language];
-  const time = useCountdown();
+  const openInvitation = () => {
+    setOpened(true);
+    if (audioRef.current) {
+      audioRef.current.play()
+        .then(() => setMusicOn(true))
+        .catch(() => setMusicOn(false));
+    }
+  };
 
-  const mapUrl =
-    "https://maps.app.goo.gl/AQJLTwkVT12W4gsW9?g_st=aw";
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    if (musicOn) {
+      audioRef.current.pause();
+      setMusicOn(false);
+    } else {
+      audioRef.current.play()
+        .then(() => setMusicOn(true))
+        .catch(() => setMusicOn(false));
+    }
+  };
 
-  const invitationUrl =
-    "https://sivasrilekhawedding-invitation-dohk.vercel.app";
-
-  // Share the invitation in the language currently selected on the website.
-  const shareMessage =
-    language === "te"
-      ? `💍 శుభ వివాహ ఆహ్వానం 💍\n\n` +
-        `శివకుమార్ ❤️ శ్రీలేఖ\n\n` +
-        `📅 తేదీ: 30 డిసెంబర్ 2026, బుధవారం\n` +
-        `⏰ ముహూర్తం: ఉదయం 3:57 గంటలకు\n` +
-        `📍 వేదిక: సాలూరు, ఆంధ్రప్రదేశ్\n\n` +
-        `🗺️ గూగుల్ మ్యాప్స్ లొకేషన్:\n${mapUrl}\n\n` +
-        `💌 మా వివాహ ఆహ్వాన పత్రికను చూడండి:\n${invitationUrl}\n\n` +
-        `దయచేసి విచ్చేసి వధూవరులను ఆశీర్వదించండి. 🙏`
-      : `💍 Wedding Invitation 💍\n\n` +
-        `With great joy, we invite you to celebrate the wedding of\n\n` +
-        `🤵 Sivakumar ❤️ Srilekha 👰\n\n` +
-        `📅 Date: Wednesday, 30 December 2026\n` +
-        `⏰ Muhurtham: 3:57 AM\n` +
-        `📍 Venue: Salur, Andhra Pradesh, India\n\n` +
-        `🗺️ Google Maps Location:\n${mapUrl}\n\n` +
-        `💌 View our wedding invitation:\n${invitationUrl}\n\n` +
-        `Please join us and bless the couple! 🙏`;
-
-  const whatsappUrl =
-    `https://wa.me/?text=${encodeURIComponent(shareMessage)}`;
+  const shareText = `🌺 Shree Ganeshaya Namah 🌺\n\nWith the blessings of our families, we invite you to the wedding of Sivakumar & Srilekha.\n\nDate: Wednesday, 30 December 2026\nMuhurtham: 3:57 AM\nVenue: Salur, Andhra Pradesh\n\nInvitation: ${SITE_URL}\nDirections: ${MAP_URL}`;
 
   return (
-    <main>
-      {/* LANGUAGE SWITCH */}
-
-      <button
-        className="language-switch"
-        onClick={() =>
-          setLanguage(language === "en" ? "te" : "en")
-        }
-      >
-        {language === "en" ? "తెలుగు" : "English"}
-      </button>
+    <main className="wedding-app">
+      <audio ref={audioRef} src="/music/wedding-instrumental.mp3" loop preload="none" />
 
       <AnimatePresence mode="wait">
-
         {!opened ? (
-
-          /* WELCOME INVITATION SCREEN */
-
           <motion.section
+            className="welcome-screen"
             key="welcome"
-            className="envelope-screen"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
-            transition={{ duration: 0.7 }}
+            exit={{ opacity: 0, scale: 1.015 }}
+            transition={{ duration: 0.8 }}
           >
-            <motion.div
-              className="envelope-card"
-              initial={{ opacity: 0, y: 50, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+            <div className="welcome-art" role="img" aria-label="Traditional Ganesha and South Indian temple wedding artwork" />
+            <div className="art-shade" />
+
+            <button
+              className="language-switch"
+              onClick={() => setLanguage(language === "en" ? "te" : "en")}
+              aria-label="Change language"
             >
-              <motion.div
-                className="ornament"
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity
-                }}
-              >
-                ❦
-              </motion.div>
+              {language === "en" ? "తెలుగు" : "English"}
+            </button>
 
-              <p className="small-heading">
-                {t.welcome}
-              </p>
+            <div className="petal-field" aria-hidden="true">
+              {petals.map((petal) => (
+                <span className={`petal petal-${petal + 1}`} key={petal}>
+                  {petal % 2 === 0 ? "❀" : "✿"}
+                </span>
+              ))}
+            </div>
 
-              <div className="gold-line" />
-
-              <motion.h1
-                initial={{ opacity: 0, y: 15 }}
+            <div className="welcome-copy">
+              <motion.p
+                className="welcome-mantra"
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.45, duration: 1 }}
               >
-                {t.invitation}
-              </motion.h1>
+                {t.mantra}
+              </motion.p>
 
-              <p className="telugu-heading">
-                {language === "en"
-                  ? "శుభ వివాహ ఆహ్వానం"
-                  : "Wedding Invitation"}
-              </p>
+              <motion.p
+                className="welcome-family"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8, duration: 1 }}
+              >
+                {t.family}
+              </motion.p>
+
+              <motion.p
+                className="welcome-invite"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.05, duration: 0.9 }}
+              >
+                {t.invite}
+              </motion.p>
 
               <motion.div
-                className="seal"
-                animate={{
-                  scale: [1, 1.08, 1],
-                  boxShadow: [
-                    "0 5px 15px #80602a40",
-                    "0 5px 25px #d6ae5260",
-                    "0 5px 15px #80602a40"
-                  ]
-                }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity
-                }}
+                className="couple-names"
+                initial={{ opacity: 0, y: 22, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 1.35, duration: 1.25, ease: [0.2, 0.75, 0.25, 1] }}
               >
-                S & S
+                <span className="name groom-name">{language === "en" ? "Sivakumar" : "శివకుమార్"}</span>
+                <span className="name-ampersand">&amp;</span>
+                <span className="name bride-name">{language === "en" ? "Srilekha" : "శ్రీలేఖ"}</span>
               </motion.div>
 
-              <p className="envelope-note">
-                {t.dear}
-              </p>
-
-              <p className="envelope-note">
-                {t.groomName} & {t.brideName}
-              </p>
+              <motion.p
+                className="welcome-date"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.8, duration: 0.9 }}
+              >
+                {t.date} <span>✦</span> {t.time}
+              </motion.p>
 
               <motion.button
-                className="gold-button"
-                whileHover={{ scale: 1.06 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setOpened(true)}
+                className="open-invitation"
+                onClick={openInvitation}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 2.05, duration: 0.9 }}
+                whileHover={{ y: -3, scale: 1.025 }}
+                whileTap={{ scale: 0.97 }}
               >
-                {t.open} ✨
+                {t.open} <span aria-hidden="true">›</span>
               </motion.button>
-
-              <div className="ornament bottom-ornament">
-                ❦
-              </div>
-            </motion.div>
+            </div>
           </motion.section>
-
         ) : (
-
-          /* MAIN WEDDING INVITATION */
-
           <motion.div
+            className="invitation-page"
             key="invitation"
-            className="invitation-content"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.75 }}
           >
+            <header className="details-hero">
+              <p className="details-mantra">ॐ · {t.mantra} · ॐ</p>
+              <p className="details-eyebrow">{t.family}</p>
+              <h1>Sivakumar <span>&amp;</span> Srilekha</h1>
+              <p className="details-blessing">{t.blessing}</p>
+              <p className="details-date">{t.date} · {t.time}</p>
+            </header>
 
-            {/* HERO SECTION */}
-
-            <section className="hero section">
-              <motion.div
-                className="hero-overlay"
-                variants={fadeUp}
-                initial="hidden"
-                animate="visible"
-              >
-                <p className="small-heading">
-                  {t.dear}
-                </p>
-
-                <h1>{t.couple}</h1>
-
-                <div className="gold-line" />
-
-                <div className="name-display">
-                  <h2>{t.groomName}</h2>
-                  <span>&</span>
-                  <h2>{t.brideName}</h2>
-                </div>
-
-                <p className="hero-subtitle">
-                  {t.request}
-                </p>
-
-                <p className="hero-date">
-                  {t.date}
-                </p>
-              </motion.div>
-            </section>
-
-            {/* GROOM AND BRIDE PHOTOS */}
-
-            <motion.section
-              className="section couple-section"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              <p className="small-heading">
-                {t.couple}
-              </p>
-
-              <h2 className="section-title">
-                {t.groom} <span>&</span> {t.bride}
-              </h2>
-
-              <div className="photo-grid">
-
-                <motion.div
-                  className="photo-card"
-                  whileHover={{
-                    y: -10,
-                    scale: 1.02
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <img
-                    src="/images/groom.jpg"
-                    alt="Sivakumar - Groom"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-
-                  <h3>{t.groomName}</h3>
-                  <p>{t.groom}</p>
-                </motion.div>
-
-                <motion.div
-                  className="photo-card"
-                  whileHover={{
-                    y: -10,
-                    scale: 1.02
-                  }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <img
-                    src="/images/bride.jpg"
-                    alt="Srilekha - Bride"
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-
-                  <h3>{t.brideName}</h3>
-                  <p>{t.bride}</p>
-                </motion.div>
-
-              </div>
-            </motion.section>
-
-            {/* COUNTDOWN */}
-
-            <motion.section
-              className="countdown-section section"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              <p className="small-heading">
-                {t.countdown}
-              </p>
-
-              <h2>{t.celebration}</h2>
-
-              <div className="countdown-grid">
+            <section className="details-section">
+              <p className="section-kicker">{t.countdown}</p>
+              <h2>{t.details}</h2>
+              <div className="countdown">
                 {[
-                  [t.days, time.days],
-                  [t.hours, time.hours],
-                  [t.minutes, time.minutes],
-                  [t.seconds, time.seconds]
+                  [t.days, countdown.days],
+                  [t.hours, countdown.hours],
+                  [t.minutes, countdown.minutes],
+                  [t.seconds, countdown.seconds]
                 ].map(([label, value]) => (
-                  <motion.div
-                    className="count-box"
-                    key={label}
-                    whileHover={{ scale: 1.06 }}
-                  >
-                    <strong>
-                      {String(value).padStart(2, "0")}
-                    </strong>
+                  <div className="count-cell" key={label}>
+                    <strong>{String(value).padStart(2, "0")}</strong>
                     <span>{label}</span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.section>
+            </section>
 
-            {/* COUPLE PHOTO GALLERY */}
-
-            <motion.section
-              className="section couple-photo-section"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              <p className="small-heading">
-                {t.gallery}
-              </p>
-
-              <h2 className="section-title">
-                {t.couple}
-              </h2>
-
-              <motion.img
-                className="couple-photo"
-                src="/images/couple.jpg"
-                alt="Sivakumar and Srilekha together"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.4 }}
-                onError={(e) => {
-                  e.currentTarget.style.display = "none";
-                }}
-              />
-            </motion.section>
-
-            {/* WEDDING DETAILS */}
-
-            <motion.section
-              className="section event-section"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.2 }}
-            >
-              <div className="ornament">❦</div>
-
-              <p className="small-heading">
-                {t.dear}
-              </p>
-
-              <h2>{t.celebration}</h2>
-
-              <div className="gold-line" />
-
-              <div className="event-details">
-
-                <div>
-                  <span>✦</span>
-                  <h3>{t.date}</h3>
-                </div>
-
-                <div>
-                  <span>✦</span>
-                  <h3>{t.muhurtham}</h3>
-                  <p>{t.time}</p>
-                </div>
-
-                <div>
-                  <span>✦</span>
-                  <h3>{t.venue}</h3>
-                  <p>{t.location}</p>
-                </div>
-
+            <section className="details-section couple-section">
+              <p className="section-kicker">{t.gallery}</p>
+              <h2>Sivakumar <span>&amp;</span> Srilekha</h2>
+              <div className="photo-pair">
+                <figure>
+                  <img src="/images/groom.jpg" alt="Sivakumar" />
+                  <figcaption>Sivakumar · {t.groom}</figcaption>
+                </figure>
+                <figure>
+                  <img src="/images/bride.jpg" alt="Srilekha" />
+                  <figcaption>Srilekha · {t.bride}</figcaption>
+                </figure>
               </div>
+              <img className="couple-photo" src="/images/couple.jpg" alt="Sivakumar and Srilekha" />
+            </section>
 
-              <a
-                className="gold-button map-button"
-                href={mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+            <section className="details-section event-section">
+              <p className="section-kicker">{t.venue}</p>
+              <h2>{t.date}</h2>
+              <p className="event-time">{t.time}</p>
+              <p className="event-location">{t.location}</p>
+              <a className="detail-button" href={MAP_URL} target="_blank" rel="noreferrer">
                 {t.directions} ↗
               </a>
-            </motion.section>
+            </section>
 
-            {/* WHATSAPP SHARING */}
-
-            <motion.section
-              className="section share-section"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <div className="ornament">❦</div>
-
-              <h2 className="section-title">
-                {t.invitation}
-              </h2>
-
-              <p>{t.invitationNote}</p>
-
+            <section className="details-section closing-section">
+              <p>{t.note}</p>
               <a
-                className="gold-button"
-                href={whatsappUrl}
+                className="detail-button whatsapp-button"
+                href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noreferrer"
               >
                 {t.share} ↗
               </a>
-            </motion.section>
+              <button className="back-to-top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+                ↑
+              </button>
+            </section>
 
-            {/* FOOTER */}
-
-            <footer className="footer">
-              <div className="ornament">❦</div>
-
-              <h2>
-                {t.groomName} & {t.brideName}
-              </h2>
-
-              <p>{t.blessings}</p>
-
-              <p className="footer-note">
-                {t.footer} ♥
-              </p>
-
-              <p className="copyright">
-                Made with love
-              </p>
+            <footer className="wedding-footer">
+              <span>❦</span>
+              <p>Sivakumar &amp; Srilekha</p>
+              <small>Made with love and blessings</small>
             </footer>
 
+            <div className="detail-controls">
+              <button
+                className="language-switch detail-language"
+                onClick={() => setLanguage(language === "en" ? "te" : "en")}
+              >
+                {language === "en" ? "తెలుగు" : "English"}
+              </button>
+              <button className="music-control" onClick={toggleMusic}>
+                {musicOn ? "♫ Music On" : "♫ Music Off"}
+              </button>
+            </div>
           </motion.div>
         )}
-
       </AnimatePresence>
     </main>
   );
 }
-
-export default App;
